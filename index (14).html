@@ -1,0 +1,579 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#faf8f3">
+  <meta name="description" content="圖案偵探：找出兩張卡片唯一相同的圖案！適合小學生的免費觀察力遊戲。">
+  <title>圖案偵探 V3 · Symbol Detective</title>
+  <style>
+    :root{--ink:#24344f;--muted:#68778c;--cream:#faf8f3;--white:#fff;--line:#e6e9ed;--blue:#416bdf;--blue-deep:#2b4bb2;--orange:#ffab55;--green:#36ad82;--red:#e95e70;--shadow:0 12px 30px rgba(42,60,99,.085);font-family:ui-rounded,"SF Pro Rounded","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+    *{box-sizing:border-box}html{height:100%;overscroll-behavior:none}body{margin:0;min-height:100%;background:var(--cream)}button{font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}button:focus-visible{outline:3px solid #f3a12f;outline-offset:3px}button:disabled{cursor:default;opacity:.65}.hidden,[hidden]{display:none!important}
+    #app{min-height:100svh;display:flex;flex-direction:column;isolation:isolate;position:relative;overflow:hidden}
+    #app:before,#app:after{content:"";position:absolute;pointer-events:none;z-index:-1;border-radius:50%}#app:before{width:410px;height:410px;top:-250px;right:-160px;background:radial-gradient(circle,#fff0d8 12%,transparent 72%)}#app:after{width:420px;height:420px;bottom:-310px;left:-210px;background:radial-gradient(circle,#e3eefc 12%,transparent 73%)}
+    .topbar{width:min(1120px,100%);margin:0 auto;padding:19px clamp(16px,4vw,32px) 8px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex:0 0 auto}
+    .brand{display:flex;align-items:center;gap:11px;font-weight:950;letter-spacing:-.04em;font-size:20px;white-space:nowrap}.brand-logo{width:40px;height:40px;display:grid;place-items:center;border-radius:15px;background:var(--blue);color:white;box-shadow:0 5px 0 #d6defb}.brand small{font-size:10px;color:var(--muted);letter-spacing:.09em;display:block;font-weight:800;margin-top:-2px}.brand-logo svg{width:26px;height:26px}.header-actions,.action-row{display:flex;align-items:center;gap:8px}
+    .icon-btn{min-width:43px;min-height:43px;padding:9px 11px;border-radius:14px;border:1px solid var(--line);background:#fff;color:var(--ink);display:inline-flex;justify-content:center;align-items:center;gap:7px;font-size:13px;font-weight:850}.icon-btn svg,.btn svg{width:19px;height:19px;flex:none}.icon-btn:active,.btn:active{transform:translateY(2px)}
+    .screen{flex:1;min-height:0}.home{display:flex;justify-content:center;align-items:center;padding:10px clamp(16px,4vw,26px) 32px}.home-grid{width:min(1040px,100%);display:grid;grid-template-columns:1fr 1.05fr;gap:clamp(20px,4vw,54px);align-items:center}
+    .eyebrow{display:inline-flex;gap:7px;align-items:center;background:#f2e7fc;color:#8660b9;font-size:12px;letter-spacing:.09em;font-weight:900;border-radius:99px;padding:9px 14px}.hero-copy h1{font-size:clamp(45px,5.2vw,76px);line-height:1.12;margin:18px 0 12px;font-weight:950;letter-spacing:-.075em}.hero-copy h1 .em{color:var(--blue)}.hero-desc{font-size:clamp(15px,1.8vw,18px);line-height:1.8;color:var(--muted);margin:0 0 25px;max-width:460px}.mini-points{display:flex;gap:9px;flex-wrap:wrap}.mini-points span{background:#fff;border:1px solid var(--line);border-radius:99px;padding:9px 13px;font-size:12px;font-weight:850}
+    .setup-panel{background:#fff;border:1px solid #f0e9df;border-radius:28px;box-shadow:0 16px 65px rgba(45,58,95,.08);padding:clamp(20px,3vw,30px);position:relative}.section-head{font-size:13px;font-weight:950;color:var(--muted);letter-spacing:.08em;margin:0 0 11px}.mode-group{display:grid;grid-template-columns:1fr 1fr;gap:10px}.choice{border:2px solid #edf0f4;border-radius:18px;min-height:104px;padding:15px 13px;text-align:left;background:#fff;transition:background .18s,border-color .18s,transform .18s;display:flex;flex-direction:column;align-items:flex-start;gap:5px;color:var(--ink)}.choice:hover{border-color:#cddaf7}.choice.selected{border-color:#5880f4;background:#f1f5ff}.choice .choice-icon{width:32px;height:32px;display:grid;place-items:center;border-radius:11px;background:#e7edfd;color:#4d70dc}.choice .choice-icon svg{width:20px;height:20px}.choice strong{font-size:15px}.choice small{font-size:11px;color:var(--muted);line-height:1.4}.mode-group .choice{min-height:122px}
+    .difficulty-group{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.diff-choice{min-height:90px;padding:12px 6px;border-radius:16px;border:2px solid #edf0f4;background:white;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:var(--ink)}.diff-choice.selected{border-color:#5880f4;background:#f1f5ff}.diff-icons{display:flex;gap:4px}.diff-icons i{width:9px;height:9px;background:#f1b45d;border-radius:50%}.diff-choice:nth-child(2) .diff-icons i{background:#69b7cc}.diff-choice:nth-child(3) .diff-icons i{background:#9d87d3}.diff-choice:nth-child(4) .diff-icons i{background:#ec917e}.diff-choice strong{font-size:14px}.diff-choice small{font-size:11px;color:var(--muted)}.setup-divider{margin:19px 0;border:0;border-top:1px solid var(--line)}
+    .btn{border:0;border-radius:16px;display:inline-flex;gap:10px;align-items:center;justify-content:center;font-size:16px;font-weight:950;padding:14px 22px;min-height:49px;transition:transform .12s,filter .12s;white-space:nowrap}.btn.primary{background:var(--blue);color:white;box-shadow:0 6px 0 #cbd7fa}.btn.primary:hover{filter:brightness(.98)}.btn.primary:active{box-shadow:0 3px 0 #cbd7fa;transform:translateY(3px)}.btn.secondary{background:#eff3fc;color:var(--blue-deep)}.btn.ghost{background:#fff;border:1px solid var(--line);color:var(--ink)}.btn.wide{width:100%}.setup-note{margin:16px 0 0;text-align:center;color:#8290a2;font-size:11px}
+    .hero-art{width:min(400px,100%);height:208px;position:relative;margin:25px auto 0}.art-circle{position:absolute;width:224px;height:170px;border-radius:25px;display:grid;place-items:center;border:8px solid white;box-shadow:0 13px 22px rgba(38,49,78,.09),inset 0 0 0 3px rgba(255,255,255,.4)}.art-circle:first-child{left:3%;top:0;background:#ffe7ac;transform:rotate(-12deg)}.art-circle:nth-child(2){right:3%;top:17px;background:#d6e9ff;transform:rotate(12deg)}.art-glyph{position:absolute;display:grid;place-items:center;width:66px;height:66px}.art-glyph svg{width:100%;height:100%}.art-sparkle{position:absolute;font-size:35px;color:#edaf4a;z-index:2;right:3%;top:14px}
+    .game{display:flex;flex-direction:column;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:0 clamp(10px,2.5vw,24px) max(10px,env(safe-area-inset-bottom));width:min(1240px,100%);margin:0 auto}.game-header{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:10px;margin:5px 0 8px}.game-label{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.chip{padding:7px 11px;border-radius:99px;font-size:12px;font-weight:900;background:#e9efff;color:#3a5eb4}.chip.soft{background:#ffefd8;color:#ae702a}.hud{flex:0 0 auto;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.stat{background:#fff;border:1px solid var(--line);border-radius:16px;text-align:center;padding:8px 6px;box-shadow:0 2px 10px rgba(33,55,95,.028)}.stat-label{font-size:10px;color:var(--muted);font-weight:850}.stat-value{font-size:clamp(20px,3.4vw,30px);font-weight:950;line-height:1.3;font-variant-numeric:tabular-nums}.stat-value.soon{color:#e46b43}.timer-track{width:100%;height:6px;border-radius:10px;background:#e7edfb;overflow:hidden;margin:8px 0 0;flex:0 0 auto}.timer-fill{width:100%;height:100%;background:#75b7ef;border-radius:10px;transition:background .2s}.timer-fill.low{background:#ef8c7d}
+    .play-deck{flex:1 1 auto;min-height:0;display:flex;align-items:center;justify-content:center;gap:clamp(9px,2.3vw,28px);position:relative;padding:8px 0;overflow:visible}.play-deck.vertical{flex-direction:column}.play-deck.horizontal{flex-direction:row}.play-deck:before{content:"";position:absolute;width:100%;height:100%;pointer-events:none;background-image:radial-gradient(#e8e8df 1px,transparent 1px);background-size:25px 25px;opacity:.5;mask-image:radial-gradient(ellipse,black 15%,transparent 70%);z-index:-1}
+    .play-card{width:var(--card-width,294px);height:var(--card-height,210px);flex:0 0 auto;border-radius:24px;position:relative;overflow:hidden;border:7px solid white;box-shadow:0 10px 24px rgba(32,57,98,.115),0 3px 0 rgba(82,96,132,.09);background:#fff2cb;isolation:isolate;transform:translateZ(0)}.play-card.card-b{background:#e0f3fc}.play-card:before{content:"";inset:5px;position:absolute;border-radius:19px;border:2px dashed rgba(136,121,104,.16);pointer-events:none}.play-card:after{content:"";inset:0;position:absolute;z-index:-1;background:radial-gradient(circle at 30% 18%,rgba(255,255,255,.8),transparent 58%)}
+    .symbol{position:absolute;top:var(--cy);left:var(--cx);width:var(--tap);height:var(--tap);display:flex;align-items:center;justify-content:center;border:none;border-radius:50%;background:transparent;padding:2px;transform:translate(-50%,-50%);touch-action:manipulation;outline-offset:0;user-select:none;-webkit-user-select:none}.symbol svg{width:var(--pic);height:var(--pic);max-width:100%;max-height:100%;display:block;overflow:visible;pointer-events:none;transform:rotate(var(--rotation,0deg));filter:drop-shadow(0 2px 0 rgba(23,41,72,.075));transition:transform .16s ease}.symbol:active svg{transform:rotate(var(--rotation,0deg)) scale(.93)}.symbol:focus-visible{outline:3px solid #5b78da}.symbol.good{z-index:5;background:rgba(70,192,130,.18);box-shadow:0 0 0 3px #3cbd85,0 0 0 8px rgba(54,189,133,.22);animation:correctPop .5s ease}.symbol.good svg{transform:rotate(var(--rotation,0deg)) scale(1.18)}.symbol.wrong{background:rgba(233,94,112,.18);box-shadow:0 0 0 2px #e95e70;animation:shake .32s ease}.symbol.hinted{background:rgba(250,184,54,.25);box-shadow:0 0 0 3px #e9a835,0 0 0 8px rgba(248,194,91,.14);animation:hintPulse 1.4s ease-in-out infinite}
+    .game-footer{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;padding:4px 0 5px}.instruction{font-weight:950;text-align:center;font-size:clamp(13px,2.3vw,18px);line-height:1.3;min-height:24px}.instruction.good{color:var(--green)}.instruction.bad{color:var(--red)}.game-tools{display:flex;justify-content:center;gap:9px}.small-action{display:inline-flex;align-items:center;justify-content:center;gap:6px;font-weight:900;color:#52617a;background:white;border:1px solid var(--line);border-radius:13px;padding:9px 15px;min-height:39px;font-size:12px}.small-action svg{width:17px;height:17px}.small-action:disabled{opacity:.4}
+    .results{padding:25px 16px 45px;display:flex;align-items:center;justify-content:center}.result-card{width:min(520px,100%);background:white;border:1px solid var(--line);padding:clamp(22px,5vw,40px);border-radius:30px;box-shadow:var(--shadow);text-align:center}.result-trophy{margin:0 auto 10px;width:105px;height:105px;border-radius:50%;display:grid;place-items:center;background:#fff0cb}.result-trophy svg{width:64px;height:64px}.result-card h2{font-size:clamp(29px,6vw,40px);margin:8px 0 2px;letter-spacing:-.04em}.result-sub{color:var(--muted);font-size:14px;line-height:1.6}.result-score{font-size:60px;font-weight:950;line-height:1.2;color:var(--blue);letter-spacing:-.06em;margin:16px 0 3px}.result-score small{font-size:16px;color:var(--muted);letter-spacing:0}.result-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:20px 0}.result-stat{padding:11px 4px;background:#f5f7fb;border-radius:13px}.result-stat strong{font-size:22px;display:block}.result-stat span{color:var(--muted);font-weight:800;font-size:11px}.result-buttons{display:flex;flex-wrap:wrap;gap:9px;justify-content:center}.record-banner{margin-top:12px;padding:9px 12px;background:#fff4d8;color:#a16e24;border-radius:13px;font-size:12px;font-weight:900}
+    .modal-layer{position:fixed;inset:0;z-index:50;display:grid;place-items:center;background:rgba(27,39,65,.44);backdrop-filter:blur(5px);padding:20px}.modal{width:min(460px,100%);max-height:min(90dvh,760px);overflow:auto;background:white;border-radius:26px;box-shadow:0 30px 70px rgba(13,31,65,.2);padding:24px;position:relative}.modal h2{font-size:26px;letter-spacing:-.045em;margin:0 0 10px}.modal p{font-size:14px;line-height:1.8;color:var(--muted)}.modal .x-btn{position:absolute;right:15px;top:14px}.modal-btns{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:20px}.tutorial-art{display:flex;justify-content:center;align-items:center;gap:12px;margin:17px 0}.tut-card{height:115px;width:145px;border-radius:19px;background:#fff0cc;border:5px solid #f7e5ad;display:grid;grid-template-columns:1fr 1fr;place-items:center;padding:16px;gap:4px}.tut-card:nth-child(2){background:#e1f1ff;border-color:#c9e7ff}.tut-card svg{width:42px;height:42px}.tut-card .sample-match{border-radius:50%;outline:3px solid #43c08d;outline-offset:2px;background:#d8f9eb}.tut-note{text-align:center;color:#218c62;font-size:14px;font-weight:900}.record-table{display:grid;gap:9px;margin:20px 0 4px}.record-row{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:#f5f7fb;border-radius:13px}.record-row strong{font-size:14px}.record-row span{font-size:12px;color:var(--muted)}.record-row b{font-size:18px;color:var(--blue)}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    @keyframes shake{0%,100%{transform:translate(-50%,-50%)}25%{transform:translate(calc(-50% - 5px),-50%)}75%{transform:translate(calc(-50% + 5px),-50%)}}@keyframes correctPop{0%{transform:translate(-50%,-50%) scale(.95)}65%{transform:translate(-50%,-50%) scale(1.13)}100%{transform:translate(-50%,-50%) scale(1)}}@keyframes hintPulse{50%{box-shadow:0 0 0 3px #e9a835,0 0 0 12px rgba(248,194,91,.06)}}
+
+    /* V2.1：真正覆蓋整個 viewport 的中央開場倒數，不依賴卡片尺寸或卷動位置。 */
+    .countdown-overlay{position:fixed;inset:0;z-index:70;display:grid;place-items:center;overflow:hidden;padding:calc(18px + env(safe-area-inset-top)) calc(18px + env(safe-area-inset-right)) calc(18px + env(safe-area-inset-bottom)) calc(18px + env(safe-area-inset-left));background:rgba(15,28,53,.79);-webkit-backdrop-filter:blur(7px);backdrop-filter:blur(7px);touch-action:none;user-select:none;-webkit-user-select:none;overscroll-behavior:contain}
+    .countdown-center{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(10px,3dvh,24px);width:100%;text-align:center;color:#fff;pointer-events:none}
+    .countdown-kicker{font-size:clamp(13px,2.8vw,18px);font-weight:850;letter-spacing:.22em;color:#e4eaf6}
+    .countdown-number{font-size:clamp(96px,min(30vw,32dvh),168px);line-height:1.02;font-weight:950;letter-spacing:-.065em;color:#fff;text-shadow:0 12px 36px rgba(0,0,0,.18);font-variant-numeric:tabular-nums;white-space:nowrap}
+    .countdown-number.is-go{font-size:clamp(62px,min(18vw,25dvh),108px);letter-spacing:-.075em;color:#ffd46d}
+    .countdown-number.pop{animation:countdownPop .42s cubic-bezier(.17,.89,.28,1.25) both}
+    .countdown-progress{display:flex;gap:10px;align-items:center;justify-content:center}
+    .countdown-progress i{display:block;width:clamp(28px,7vw,46px);height:6px;border-radius:99px;background:rgba(255,255,255,.22);transition:background .16s}
+    .countdown-progress i.lit{background:#ffd46d}
+    @keyframes countdownPop{0%{opacity:.25;transform:scale(.72)}60%{opacity:1;transform:scale(1.11)}100%{opacity:1;transform:scale(1)}}
+    .modal-layer{z-index:80} /* 首次教學及暫停對話框必須在倒數之上 */
+
+    /* V3 大型錯誤回饋、連續成功獎勵與精簡結果卡 */
+    .wrong-overlay{position:fixed;inset:0;z-index:72;display:grid;place-items:center;padding:calc(18px + env(safe-area-inset-top)) calc(18px + env(safe-area-inset-right)) calc(18px + env(safe-area-inset-bottom)) calc(18px + env(safe-area-inset-left));background:rgba(25,39,66,.62);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);touch-action:none;overscroll-behavior:contain}
+    .wrong-panel{background:#fff9f2;border:3px solid #f2c5b5;box-shadow:0 24px 80px rgba(38,31,55,.28);border-radius:32px;width:min(430px,94vw);padding:clamp(22px,5vw,42px) 16px;display:flex;align-items:center;flex-direction:column;gap:10px;text-align:center;color:#a53f40;animation:feedbackEnter .22s both}
+    .wrong-cross{font-size:clamp(64px,16vw,100px);font-weight:950;line-height:1;color:#e26472;transform:rotate(-8deg)}.wrong-panel strong{font-size:clamp(35px,7.5vw,55px);letter-spacing:-.06em}.wrong-panel span{font-size:clamp(14px,3.2vw,19px);font-weight:900;color:#a65450}.wrong-panel small{font-size:12px;font-weight:750;color:#a9807d}
+    .wrong-overlay.fade{animation:feedbackOut .2s both}.wrong-overlay.fade .wrong-panel{animation:none}
+    .combo-toast{position:absolute;z-index:9;top:clamp(105px,17vh,155px);left:50%;transform:translateX(-50%);pointer-events:none;white-space:nowrap;text-align:center;background:#fff5d9;color:#90561d;border:2px solid #f5cf7b;box-shadow:0 8px 30px rgba(129,79,31,.15);border-radius:99px;padding:11px 20px;font-size:clamp(15px,3.2vw,22px);font-weight:950;animation:badgePop .35s ease-out}
+    .success-spark{position:fixed;z-index:11;pointer-events:none;left:50%;top:47%;transform:translate(-50%,-50%);display:grid;place-items:center;text-align:center;color:#278c63;font-size:clamp(28px,5vw,45px);font-weight:950;text-shadow:0 2px 15px #fff,0 3px 30px #fff;animation:sparkPop .55s ease-out both}.success-spark span{font-size:clamp(33px,6vw,52px);display:block}
+    .result-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.result-medals{display:flex;flex-wrap:wrap;justify-content:center;gap:7px;margin:10px auto}.result-medals span{font-weight:850;font-size:12px;padding:7px 11px;border-radius:99px;background:#fff2d4;color:#9b6326}
+    @keyframes feedbackEnter{from{opacity:.35;transform:scale(.82)}to{opacity:1;transform:scale(1)}}
+    @keyframes feedbackOut{to{opacity:0}}
+    @keyframes badgePop{0%{opacity:0;transform:translateX(-50%) scale(.7)}80%{opacity:1;transform:translateX(-50%) scale(1.08)}100%{transform:translateX(-50%) scale(1)}}
+    @keyframes sparkPop{0%{opacity:0;transform:translate(-50%,-50%) scale(.65)}35%{opacity:1;transform:translate(-50%,-50%) scale(1.13)}100%{opacity:0;transform:translate(-50%,-58%) scale(1)}}
+    @media(max-width:760px){.difficulty-group{grid-template-columns:repeat(2,minmax(0,1fr))}.diff-choice{min-height:67px;padding:8px 6px;gap:3px}.diff-choice strong{font-size:13px}.diff-choice small{font-size:10px}.diff-icons i{width:7px;height:7px}}
+    @media(max-height:660px) and (orientation:portrait){.diff-choice{min-height:58px}.setup-divider{margin:10px 0}.setup-panel{padding:16px}}
+    @media(max-width:760px){.topbar{padding:14px 16px 6px}.home{align-items:flex-start;padding-top:10px}.home-grid{grid-template-columns:1fr;gap:15px;max-width:530px}.hero-copy h1{font-size:clamp(38px,9vw,57px);margin:12px 0 6px}.hero-desc{font-size:14px;margin-bottom:10px}.mini-points{display:none}.hero-art{display:none}.setup-panel{padding:21px}.game-header{margin:0 0 6px}.brand{font-size:17px}.game .game-header{margin-bottom:7px}.game{padding-left:11px;padding-right:11px}.stat{padding:6px 2px;border-radius:13px}.stat-value{font-size:23px}.stat-label{font-size:10px}.game-footer{gap:3px}.instruction{font-size:14px}.game .chip{font-size:11px;padding:6px 8px}}
+    @media(max-height:690px){.topbar{padding-top:8px;padding-bottom:3px}.brand-logo{height:35px;width:35px}.game .game-header{margin:0 0 3px}.game .icon-btn{min-height:35px;padding:6px 10px}.game .stat{padding:4px 2px}.game .stat-value{font-size:21px}.game-footer{padding:0;gap:1px}.small-action{min-height:34px;padding:6px 13px}.timer-track{margin-top:4px}.play-deck{padding:2px 0}}
+    @media(max-height:520px) and (orientation:landscape){body.in-game .topbar{display:none}.game-header{padding-top:3px}}
+    @media(max-height:610px) and (orientation:portrait){.brand small{display:none}.game .chip.soft{display:none}.game-header .icon-btn .text-label{display:none}}
+    @media(min-width:761px) and (max-height:670px){.home{align-items:flex-start}.hero-art{display:none}.hero-copy h1{font-size:50px}.game .topbar{padding-top:8px}}
+    @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+  </style>
+</head>
+<body>
+<div id="app">
+  <header class="topbar" id="topbar">
+    <div class="brand" aria-label="圖案偵探">
+      <div class="brand-logo"><svg viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round"><circle cx="15" cy="15" r="9"/><path d="m22 22 9 9"/><path d="M12 15h6"/></svg></div>
+      <span>圖案偵探<small>SYMBOL DETECTIVE</small></span>
+    </div>
+    <div class="header-actions">
+      <button type="button" class="icon-btn" id="soundTop" title="開啟或關閉音效" aria-label="音效開關"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4V5Z"/><path class="sound-waves" d="M15.5 8.5a5 5 0 0 1 0 7m3-10a9 9 0 0 1 0 13"/><path class="sound-muted" d="m16 9 5 6m0-6-5 6"/></svg><span class="text-label">音效</span></button>
+      <button type="button" class="icon-btn" id="rulesTop">玩法說明</button>
+    </div>
+  </header>
+
+  <main id="homeScreen" class="screen home">
+    <div class="home-grid">
+      <div class="hero-copy">
+        <span class="eyebrow">✦ V3 · 專注挑戰版</span>
+        <h1>眼睛睜大！<br><span class="em">找出一樣的！</span></h1>
+        <p class="hero-desc">每兩張卡，都藏著<strong>唯一一個</strong>相同圖案。你能多快找到？動動眼睛，展開一場觀察力冒險！</p>
+        <div class="mini-points"><span>◉ 不用下載</span><span>◉ 手機平板都能玩</span><span>◉ 每局只需幾分鐘</span></div>
+        <div class="hero-art" id="heroArt" aria-hidden="true"><div class="art-circle" id="artA"></div><div class="art-circle" id="artB"></div><span class="art-sparkle">✦</span></div>
+      </div>
+      <div class="setup-panel">
+        <p class="section-head">01　選擇遊玩模式</p>
+        <div class="mode-group" role="group" aria-label="遊戲模式">
+          <button type="button" class="choice selected" data-mode="practice" aria-pressed="true"><span class="choice-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m16 16 5 5M8 11l2 2 4-4"/></svg></span><strong>自由練習</strong><small>10 題 · 不限時間 · 有提示</small></button>
+          <button type="button" class="choice" data-mode="timed" aria-pressed="false"><span class="choice-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v5l3 2M9 2h6"/></svg></span><strong>60 秒挑戰</strong><small>和時間比賽 · 突破紀錄</small></button>
+        </div>
+        <hr class="setup-divider">
+        <p class="section-head">02　選擇挑戰難度</p>
+        <div class="difficulty-group" role="group" aria-label="遊戲難度">
+          <button type="button" class="diff-choice selected" data-level="easy" aria-pressed="true"><span class="diff-icons"><i></i><i></i><i></i></span><strong>入門</strong><small>3 個圖案</small></button>
+          <button type="button" class="diff-choice" data-level="normal" aria-pressed="false"><span class="diff-icons"><i></i><i></i><i></i><i></i></span><strong>普通</strong><small>4 個圖案</small></button>
+          <button type="button" class="diff-choice" data-level="hard" aria-pressed="false"><span class="diff-icons"><i></i><i></i><i></i><i></i><i></i></span><strong>困難</strong><small>6 個圖案</small></button>
+          <button type="button" class="diff-choice" data-level="expert" aria-pressed="false"><span class="diff-icons"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><strong>專家</strong><small>8 個圖案</small></button>
+        </div>
+        <div style="height:20px"></div>
+        <button type="button" class="btn primary wide" id="startBtn">開始尋找 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></button>
+        <p class="setup-note"><button id="openRecords" type="button" style="border:0;background:none;color:#4768c7;font-weight:900;text-decoration:underline;text-underline-offset:4px">查看最佳紀錄</button>　·　無須登入</p>
+      </div>
+    </div>
+  </main>
+
+  <main id="gameScreen" class="screen game hidden" aria-label="遊戲畫面">
+    <div class="game-header"><div class="game-label"><span id="gameModeChip" class="chip">自由練習</span><span id="gameLevelChip" class="chip soft">入門</span></div><div class="action-row"><button id="pauseBtn" class="icon-btn" type="button" aria-label="暫停遊戲">⏸ 暫停</button><button id="leaveBtn" class="icon-btn" type="button">⌂ 首頁</button></div></div>
+    <div class="hud"><div class="stat"><div id="statLabel1" class="stat-label">目前題目</div><div id="statValue1" class="stat-value">1 / 10</div></div><div class="stat"><div id="statLabel2" class="stat-label">正確次數</div><div id="statValue2" class="stat-value">0</div></div><div class="stat"><div id="statLabel3" class="stat-label">完成時間</div><div id="statValue3" class="stat-value">0:00</div></div></div>
+    <div class="timer-track hidden" id="timerTrack"><div class="timer-fill" id="timerFill"></div></div>
+    <div id="comboToast" class="combo-toast hidden" aria-live="polite" aria-atomic="true"></div>
+    <div class="play-deck vertical" id="playDeck" aria-label="找出兩張圖卡中的相同圖案"><div class="play-card card-a" id="cardA" aria-label="第一張卡片"></div><div class="play-card card-b" id="cardB" aria-label="第二張卡片"></div></div>
+    <div id="successSpark" class="success-spark hidden" aria-live="polite"><span>✦</span>答對了！</div>
+    <div class="game-footer"><div class="instruction" id="instruction" role="status" aria-live="polite">找出兩張卡一樣的圖案！</div><div class="game-tools"><button type="button" id="hintBtn" class="small-action">💡 提示一下</button><button type="button" id="soundGame" class="small-action">♫ 音效關閉</button></div></div>
+  </main>
+
+  <main id="resultScreen" class="screen results hidden">
+    <div class="result-card"><div class="result-trophy" id="resultBadge"></div><h2 id="resultTitle">太棒了！</h2><div class="result-sub" id="resultSubtitle">挑戰完成</div><div class="result-score" id="resultScore">10 <small>題</small></div><div class="result-stats" id="resultStats"></div><div class="result-medals" id="resultMedals"></div><div id="recordBanner" class="record-banner hidden">✦ 打破新紀錄！</div><div class="result-buttons" style="margin-top:23px"><button type="button" id="replayBtn" class="btn primary">再玩一次 ↗</button><button type="button" id="resultHomeBtn" class="btn ghost">返回首頁</button></div></div>
+  </main>
+</div>
+
+
+<!-- V3 錯誤回饋：整個畫面中央顯示，並以同步遊戲狀態鎖保護答案。 -->
+<div id="wrongOverlay" class="wrong-overlay hidden" role="status" aria-live="assertive" aria-atomic="true" aria-hidden="true">
+  <div class="wrong-panel"><div class="wrong-cross" aria-hidden="true">✕</div><strong>再找找！</strong><span>兩張卡只有一個相同圖案</span><small>請細心觀察，再試一次</small></div>
+</div>
+
+<!-- 只在 60 秒挑戰的開場出現；置於 #app 外，避免遊戲容器的裁切與 stacking context。 -->
+<div id="countdownOverlay" class="countdown-overlay hidden" aria-hidden="true">
+  <div class="countdown-center" role="status" aria-live="polite" aria-atomic="true">
+    <div class="countdown-kicker">準備開始！</div>
+    <div id="countdownNumber" class="countdown-number">3</div>
+    <div class="countdown-progress" aria-hidden="true"><i id="countDot1"></i><i id="countDot2"></i><i id="countDot3"></i></div>
+  </div>
+</div>
+
+<div id="modalLayer" class="modal-layer hidden" role="presentation">
+  <section class="modal" id="modalPanel" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><button type="button" class="icon-btn x-btn" id="modalClose" aria-label="關閉">✕</button><h2 id="modalTitle"></h2><div id="modalContent"></div><div class="modal-btns" id="modalButtons"></div></section>
+</div>
+
+<script>
+(() => {
+  'use strict';
+  // 31 原創平面 SVG 圖案。顏色與幾何圖形內置，離線也能使用。
+  const SHAPES = [
+    {name:'蘋果',svg:`<path fill="#ec6372" d="M49 30C30 14 12 33 18 57c5 19 17 29 30 23 12 6 25-2 31-22 8-24-12-43-30-28Z"/><path d="M50 32c-4-9-1-16 4-20" stroke="#684a39" stroke-width="6" stroke-linecap="round" fill="none"/><path d="M51 19c16-15 27-7 24 2-13 8-20 7-24-2" fill="#4dad7a"/><circle cx="31" cy="45" r="6" fill="#fff" opacity=".5"/>`},
+    {name:'火箭',svg:`<path d="M40 60 23 77 20 62 33 49" fill="#4ca9df" stroke="#2a5c94" stroke-width="3"/><path d="m60 59 18 18 3-16-14-14" fill="#4ca9df" stroke="#2a5c94" stroke-width="3"/><path d="M37 65C30 43 41 19 63 11c13 17 10 43-6 58Z" fill="#f4f2ee" stroke="#49668c" stroke-width="4"/><circle cx="54" cy="38" r="10" fill="#7bd6ed" stroke="#49668c" stroke-width="4"/><path d="M37 65 57 69 47 81Z" fill="#ee6670"/><path d="m39 77-10 15 17-9" fill="#ffa54d"/>`},
+    {name:'太陽',svg:`<g stroke="#edac3d" stroke-width="7" stroke-linecap="round"><path d="M50 7v11M50 82v11M7 50h11M82 50h11M20 20l8 8m44 44 8 8M80 20l-8 8M28 72l-8 8"/></g><circle cx="50" cy="50" r="27" fill="#ffd36c"/><circle cx="41" cy="47" r="3" fill="#785231"/><circle cx="59" cy="47" r="3" fill="#785231"/><path d="M41 59q9 9 18 0" stroke="#785231" stroke-width="3" fill="none" stroke-linecap="round"/>`},
+    {name:'花朵',svg:`<g fill="#fa89ad"><ellipse cx="50" cy="26" rx="14" ry="20"/><ellipse cx="75" cy="45" rx="18" ry="14"/><ellipse cx="67" cy="74" rx="14" ry="19"/><ellipse cx="33" cy="74" rx="14" ry="19"/><ellipse cx="25" cy="45" rx="18" ry="14"/></g><circle cx="50" cy="50" r="16" fill="#ffd56c"/><circle cx="46" cy="47" r="2" fill="#986632"/><circle cx="54" cy="47" r="2" fill="#986632"/>`},
+    {name:'汽車',svg:`<path d="M20 46 30 26h40l12 20 5 5v22H13V51Z" fill="#ee6b6b" stroke="#a94158" stroke-width="3"/><path d="m35 30-8 17h45L65 30Z" fill="#b6edfc"/><circle cx="29" cy="73" r="10" fill="#344563"/><circle cx="72" cy="73" r="10" fill="#344563"/><circle cx="29" cy="73" r="4" fill="#e6eaf1"/><circle cx="72" cy="73" r="4" fill="#e6eaf1"/><rect x="17" y="53" width="14" height="7" rx="3" fill="#ffe4a0"/>`},
+    {name:'雲朵',svg:`<path d="M25 73C8 71 7 47 27 43c0-26 35-36 48-9 22-1 26 33 4 39Z" fill="#c3e9fc" stroke="#78b3d8" stroke-width="4"/><path d="M37 50q12-16 28-8" stroke="white" stroke-width="5" fill="none" stroke-linecap="round"/>`},
+    {name:'星星',svg:`<path d="m50 7 13 27 30 4-22 22 5 31-26-14-27 14 5-31L6 38l31-4Z" fill="#ffd368" stroke="#e7a33d" stroke-width="4" stroke-linejoin="round"/><circle cx="42" cy="50" r="3" fill="#956b40"/><circle cx="59" cy="50" r="3" fill="#956b40"/><path d="M43 61q7 7 14 0" stroke="#956b40" stroke-width="3" fill="none"/>`},
+    {name:'小魚',svg:`<path d="M67 51 91 29v44L67 54" fill="#ed8398" stroke="#b66376" stroke-width="3"/><ellipse cx="46" cy="51" rx="36" ry="26" fill="#64c9ca" stroke="#308a95" stroke-width="4"/><path d="m43 33 11-14 11 18" fill="#79dcdb"/><circle cx="30" cy="45" r="5" fill="#264764"/><circle cx="28" cy="43" r="2" fill="white"/><path d="M21 59q7 7 14 0" fill="none" stroke="#32798d" stroke-width="3"/>`},
+    {name:'蝴蝶',svg:`<ellipse cx="27" cy="35" rx="20" ry="25" transform="rotate(-25 27 35)" fill="#ffbd70"/><ellipse cx="73" cy="35" rx="20" ry="25" transform="rotate(25 73 35)" fill="#ffbd70"/><ellipse cx="30" cy="70" rx="17" ry="19" fill="#f38ba5"/><ellipse cx="70" cy="70" rx="17" ry="19" fill="#f38ba5"/><rect x="45" y="28" width="10" height="53" rx="5" fill="#5c557a"/><path d="M49 33q-20-31-25-13m27 13q20-31 25-13" fill="none" stroke="#5c557a" stroke-width="3" stroke-linecap="round"/><circle cx="25" cy="35" r="6" fill="#ffeaad"/><circle cx="75" cy="35" r="6" fill="#ffeaad"/>`},
+    {name:'樹木',svg:`<rect x="43" y="56" width="16" height="34" rx="3" fill="#a97955"/><circle cx="50" cy="33" r="26" fill="#78c894"/><circle cx="29" cy="50" r="22" fill="#55ba80"/><circle cx="69" cy="50" r="22" fill="#66c78d"/><circle cx="57" cy="20" r="12" fill="#a1dba1"/>`},
+    {name:'小貓',svg:`<path d="m20 43 5-31 23 16 24-16 8 31v20q-2 25-30 25T20 63Z" fill="#f8b56b" stroke="#cb8354" stroke-width="3" stroke-linejoin="round"/><path d="m27 22 4 14-9 2Zm46-1-5 15 10 2Z" fill="#f39ca1"/><ellipse cx="38" cy="53" rx="4" ry="6" fill="#3d4a57"/><ellipse cx="63" cy="53" rx="4" ry="6" fill="#3d4a57"/><path d="m46 64 5 4 5-4-5-3Z" fill="#ce7279"/><path d="m51 68-5 5m5-5 5 5M28 66l-17-4m17 10-17 2m62-8 17-4m-17 10 17 2" stroke="#9a654c" stroke-width="2.5" fill="none" stroke-linecap="round"/>`},
+    {name:'小狗',svg:`<path d="M31 31C14 11 4 24 12 49l15 7m44-25c18-20 27-7 19 18l-15 7" fill="#a97964" stroke="#825b52" stroke-width="3"/><path d="M22 44c0-32 56-32 56 0v22c0 28-56 28-56 0Z" fill="#ecd0a5" stroke="#ac8067" stroke-width="3"/><ellipse cx="40" cy="52" rx="4" ry="5" fill="#514751"/><ellipse cx="60" cy="52" rx="4" ry="5" fill="#514751"/><ellipse cx="50" cy="65" rx="8" ry="6" fill="#63545b"/><path d="M50 70q-7 9-12 2m12-2q7 9 12 2" fill="none" stroke="#63545b" stroke-width="3" stroke-linecap="round"/>`},
+    {name:'雪糕',svg:`<path d="M32 51 50 92 68 51Z" fill="#e7b86c" stroke="#b68c56" stroke-width="3"/><path d="m39 61 20 20m0-20L42 80" stroke="#cc995b" stroke-width="2"/><path d="M23 56c-12-13-2-24 9-25-3-18 20-29 32-16 5 5 6 9 5 17 18 2 22 25 8 27Z" fill="#f9a6bf" stroke="#d8799b" stroke-width="3"/><circle cx="45" cy="29" r="4" fill="#fff2ce"/><circle cx="65" cy="41" r="4" fill="#fff2ce"/>`},
+    {name:'雨傘',svg:`<path d="M13 48Q50-22 87 48H13Z" fill="#72b7e7" stroke="#377fab" stroke-width="4" stroke-linejoin="round"/><path d="M50 47V78q0 16-17 10" fill="none" stroke="#8a6d67" stroke-width="7" stroke-linecap="round"/><path d="M50 9v-6M13 48q9 15 18 0m0 0q10 15 19 0m0 0q9 15 19 0m0 0q9 15 18 0" stroke="#4d91c3" stroke-width="3" fill="none"/>`},
+    {name:'月亮',svg:`<path d="M65 12C39 15 26 33 28 56c2 19 20 31 43 25C50 97 19 85 12 58 5 31 25 12 65 12Z" fill="#f7d47d" stroke="#dbad4d" stroke-width="3"/><circle cx="76" cy="26" r="5" fill="#9ac9fa"/><path d="m73 55 4-9 4 9 9 4-9 4-4 9-4-9-9-4Z" fill="#d2c6ff"/>`},
+    {name:'書本',svg:`<path d="M11 18q22-10 39 5 17-15 39-5v63q-24-8-39 5-17-13-39-5Z" fill="#a8d8f7" stroke="#4f92bd" stroke-width="4" stroke-linejoin="round"/><path d="M50 23v63M20 37q13-6 23 2M20 49q13-5 23 2m14-12q11-8 23-2M57 51q12-6 23-2" stroke="#6cadd4" stroke-width="3" fill="none" stroke-linecap="round"/>`},
+    {name:'相機',svg:`<rect x="11" y="28" width="78" height="55" rx="11" fill="#8b88d2" stroke="#5b5b99" stroke-width="4"/><path d="m28 29 8-11h26l8 11" fill="#a49ee0" stroke="#5b5b99" stroke-width="4"/><circle cx="50" cy="56" r="19" fill="#d8ebfa" stroke="#615b9f" stroke-width="5"/><circle cx="50" cy="56" r="10" fill="#75b6db"/><circle cx="75" cy="40" r="4" fill="#fff2ba"/>`},
+    {name:'氣球',svg:`<path d="M50 7c-22 0-35 16-35 36 0 23 18 36 35 38 17-2 35-15 35-38C85 23 72 7 50 7Z" fill="#f17f96" stroke="#c75c7b" stroke-width="3"/><path d="m50 80-8 8h16l-8-8Z" fill="#c65e79"/><path d="M50 88q-18 7-4 15" fill="none" stroke="#97828d" stroke-width="2"/><ellipse cx="34" cy="32" rx="8" ry="15" transform="rotate(22 34 32)" fill="#ffd2dc"/>`},
+    {name:'禮物',svg:`<rect x="15" y="39" width="70" height="49" rx="5" fill="#ed7d9c"/><rect x="11" y="32" width="78" height="15" rx="4" fill="#fa9bb3"/><path d="M45 32h12v56H45Z" fill="#ffe4a1"/><path d="M50 30C23 31 17 9 33 10c13 1 17 20 17 20Zm0 0c24 0 35-20 20-20S50 30 50 30Z" fill="#ffcd7b" stroke="#dfa84e" stroke-width="3" stroke-linejoin="round"/>`},
+    {name:'愛心',svg:`<path d="M50 88 16 55C-7 30 18 4 41 19l9 9 9-9C82 4 107 30 84 55Z" fill="#ee6f85" stroke="#c64f70" stroke-width="4"/><path d="M20 36q0-13 12-13" fill="none" stroke="#ffb6c6" stroke-width="6" stroke-linecap="round"/>`},
+    {name:'鉛筆',svg:`<g transform="rotate(34 50 50)"><rect x="35" y="14" width="30" height="60" rx="4" fill="#f4bf57" stroke="#c78d41" stroke-width="3"/><rect x="35" y="14" width="30" height="12" rx="4" fill="#f397a9"/><path d="M35 73 50 96l15-23Z" fill="#f2d5a4" stroke="#ac8761" stroke-width="3"/><path d="m44 87 6 9 6-9" fill="#4b546e"/><path d="M45 28v42" stroke="#ffe6a5" stroke-width="3"/></g>`},
+    {name:'鑰匙',svg:`<circle cx="32" cy="34" r="20" fill="#f4c969" stroke="#d8a744" stroke-width="5"/><circle cx="32" cy="34" r="9" fill="#fff8dd"/><path d="M47 48 83 84h9V71H80V61H70L56 47" fill="#f4c969" stroke="#d8a744" stroke-width="5" stroke-linejoin="round"/>`},
+    {name:'足球',svg:`<circle cx="50" cy="50" r="40" fill="#f9fbfb" stroke="#7c99a3" stroke-width="4"/><path d="m50 27 20 14-7 24H37l-7-24Z" fill="#59667d"/><path d="M50 27 47 12M30 41 12 36m25 29L26 83m37-18 12 18m-5-42 18-5" stroke="#7c99a3" stroke-width="4" fill="none"/>`},
+    {name:'飛機',svg:`<path d="M51 7q-7 1-7 13l-2 27-28 15v13l31-8 2 14-12 9v6l16-5 16 5v-6l-12-9 2-14 31 8V62L59 47 57 20Q57 8 51 7Z" fill="#78bfdf" stroke="#4e92b9" stroke-width="3" stroke-linejoin="round"/><path d="M51 20v49" stroke="#d4f2fb" stroke-width="3"/>`},
+    {name:'杯子',svg:`<path d="M21 28h55v28q-3 23-27 23T21 56Z" fill="#f3a96c" stroke="#cb824e" stroke-width="4"/><path d="M75 37h10q15 2 7 18-6 9-17 7" fill="none" stroke="#cb824e" stroke-width="7"/><path d="M32 10q-9 8 0 14m16-14q-9 8 0 14m16-14q-9 8 0 14" stroke="#97b7cc" stroke-width="4" stroke-linecap="round" fill="none"/><path d="M20 84h61" stroke="#865f58" stroke-width="5" stroke-linecap="round"/>`},
+    {name:'皇冠',svg:`<path d="M12 30 31 46l18-26 18 26 21-16-8 51H20Z" fill="#f3c45c" stroke="#d7a342" stroke-width="4" stroke-linejoin="round"/><path d="M21 70h58v13H21Z" fill="#e9af4d"/><circle cx="12" cy="29" r="5" fill="#eb7a87"/><circle cx="50" cy="19" r="5" fill="#7bc8ed"/><circle cx="88" cy="29" r="5" fill="#eb7a87"/><path d="m50 46 6 9-6 9-6-9Z" fill="#88c2dc"/>`},
+    {name:'烏龜',svg:`<ellipse cx="49" cy="57" rx="33" ry="26" fill="#77c598" stroke="#41936d" stroke-width="4"/><circle cx="82" cy="52" r="15" fill="#a2d7a5"/><circle cx="86" cy="48" r="3.7" fill="#3b5c4a"/><path d="m23 38-9-8-8 12 10 11m10 24-9 10 12 8 10-16m24-2 10 14 13-9-11-15" fill="#a2d7a5"/><path d="M49 32 64 45 60 66 40 66 33 45Z" fill="#3d9a75" opacity=".65"/><path d="M33 45 17 52m47-7 14 4M40 66l-5 16m25-16 8 14" stroke="#3d9a75" stroke-width="3" fill="none"/>`},
+    {name:'機械人',svg:`<rect x="18" y="24" width="64" height="60" rx="13" fill="#90c7e4" stroke="#5f91b7" stroke-width="4"/><path d="M50 24V12" stroke="#5f91b7" stroke-width="5"/><circle cx="50" cy="10" r="6" fill="#f6bd70"/><rect x="28" y="40" width="44" height="23" rx="8" fill="#f6fbff"/><circle cx="40" cy="51" r="5" fill="#4d79b8"/><circle cx="60" cy="51" r="5" fill="#4d79b8"/><path d="M41 72h18" stroke="#5f91b7" stroke-width="4" stroke-linecap="round"/><path d="M9 45h9m64 0h9" stroke="#5f91b7" stroke-width="6" stroke-linecap="round"/>`},
+    {name:'西瓜',svg:`<path d="M11 32q8 51 39 51 31 0 39-51Z" fill="#f0737e" stroke="#438f66" stroke-width="7" stroke-linejoin="round"/><path d="M13 36h74" stroke="#e8bfc0" stroke-width="5"/><g fill="#624a53"><path d="m35 52-4-9-4 9Zm24 0-4-9-4 9Zm-10 19-4-9-4 9Zm22-12-4-9-4 9Z"/></g>`},
+    {name:'彩虹',svg:`<path d="M10 84V54a40 40 0 0 1 80 0v30" stroke="#eb778c" stroke-width="12" fill="none"/><path d="M23 84V54a27 27 0 0 1 54 0v30" stroke="#f0b75b" stroke-width="12" fill="none"/><path d="M36 84V54a14 14 0 0 1 28 0v30" stroke="#69bcb2" stroke-width="12" fill="none"/><path d="M11 84h24m30 0h24" stroke="#e7f1fa" stroke-width="8" stroke-linecap="round"/>`},
+    {name:'燈塔',svg:`<path d="m31 82 8-48h22l8 48Z" fill="#f3ede6" stroke="#9a8b91" stroke-width="3"/><path d="M36 55h28l-2 11H34Z" fill="#ed697c"/><path d="M39 34h22l4-11H35Z" fill="#eb7b8d"/><rect x="42" y="12" width="16" height="11" rx="2" fill="#ffe6ac"/><path d="M26 84h49" stroke="#667b90" stroke-width="6" stroke-linecap="round"/><path d="M22 18 8 11m70 7 14-7M17 36 3 37m80-1 14 1" stroke="#f6c66c" stroke-width="4" stroke-linecap="round"/>`}
+,
+    {name:'小鳥',svg:`<path d="M20 66q-8-39 24-42 35-5 36 34-7 27-33 27Q27 85 20 66Z" fill="#8fc7ec" stroke="#528db9" stroke-width="4"/><path d="m73 44 22 11-22 9Z" fill="#f7c35d"/><path d="M29 60q17-23 30 0-4 24-27 15" fill="#b8e1f9"/><circle cx="64" cy="43" r="4" fill="#34516c"/><path d="M43 82v11m13-12v12" stroke="#d38e57" stroke-width="4"/>`},
+    {name:'青蛙',svg:`<ellipse cx="50" cy="61" rx="38" ry="28" fill="#7bcc86" stroke="#398d65" stroke-width="4"/><circle cx="29" cy="34" r="16" fill="#7bcc86"/><circle cx="71" cy="34" r="16" fill="#7bcc86"/><circle cx="29" cy="33" r="7" fill="white"/><circle cx="71" cy="33" r="7" fill="white"/><circle cx="31" cy="35" r="3" fill="#334e50"/><circle cx="69" cy="35" r="3" fill="#334e50"/><path d="M35 69q15 13 30 0" fill="none" stroke="#426b50" stroke-width="4" stroke-linecap="round"/>`},
+    {name:'蜜蜂',svg:`<ellipse cx="48" cy="58" rx="33" ry="22" fill="#ffd76f" stroke="#d0a34b" stroke-width="3"/><ellipse cx="41" cy="32" rx="14" ry="18" fill="#cfeaff" stroke="#9bc6df" stroke-width="3"/><ellipse cx="60" cy="33" rx="14" ry="18" fill="#cfeaff" stroke="#9bc6df" stroke-width="3"/><path d="M39 38v40m19-40v40" stroke="#4d505a" stroke-width="9"/><circle cx="20" cy="53" r="4" fill="#3b5262"/><path d="m79 57 15 6-15 8" fill="#795647"/>`},
+    {name:'章魚',svg:`<ellipse cx="50" cy="39" rx="28" ry="30" fill="#b493ea" stroke="#8062b7" stroke-width="4"/><path d="M25 52Q9 47 9 72q4 12 15 3Q11 94 28 91q10-4 13-17Q39 98 50 96q11-2 10-20Q64 96 75 89q7-7 3-13Q96 87 91 70q-5-16-17-12" fill="none" stroke="#b493ea" stroke-width="11" stroke-linecap="round"/><circle cx="41" cy="38" r="4" fill="#3c3c60"/><circle cx="60" cy="38" r="4" fill="#3c3c60"/><path d="M43 52q8 8 16 0" stroke="#8161ac" stroke-width="3" fill="none"/>`},
+    {name:'螃蟹',svg:`<ellipse cx="50" cy="60" rx="28" ry="24" fill="#f28b7b" stroke="#c85e5d" stroke-width="4"/><path d="M25 53 8 36l-3-15 15 8 15 18M75 53l17-17 3-15-15 8-15 18M23 71 7 82m19-3-9 13m58-21 18 11m-19-3 8 13" stroke="#da6c6b" stroke-width="7" stroke-linecap="round" fill="none"/><circle cx="39" cy="54" r="4" fill="#573f48"/><circle cx="61" cy="54" r="4" fill="#573f48"/>`},
+    {name:'鯨魚',svg:`<path d="M10 53q17-29 51-20 23 6 27 28l-17 14Q37 93 10 65Z" fill="#80c6e3" stroke="#458cae" stroke-width="4"/><path d="M78 64q15-20 18-4 3 17-18 19" fill="#80c6e3"/><path d="M41 32q-5-17 2-23m0 19q4-17 16-17" fill="none" stroke="#9bdcf2" stroke-width="5" stroke-linecap="round"/><circle cx="37" cy="54" r="4" fill="#25475d"/><path d="M31 67q8 6 16 0" stroke="#458cae" stroke-width="3" fill="none"/>`},
+    {name:'恐龍',svg:`<path d="M21 80V41q0-26 22-26 18 0 17 19l15 9 14 26-19 1-8-14-4 27h-9V65H37v18H25Z" fill="#8fd199" stroke="#478f65" stroke-width="4" stroke-linejoin="round"/><path d="m28 19 7-10 9 10m4-2 7-9 7 12" fill="#75bd81"/><circle cx="43" cy="35" r="4" fill="#315a48"/>`},
+    {name:'小熊',svg:`<circle cx="26" cy="27" r="16" fill="#b98b73"/><circle cx="74" cy="27" r="16" fill="#b98b73"/><circle cx="50" cy="52" r="37" fill="#cda285" stroke="#946f63" stroke-width="4"/><circle cx="38" cy="48" r="4" fill="#513f43"/><circle cx="63" cy="48" r="4" fill="#513f43"/><ellipse cx="50" cy="64" rx="14" ry="10" fill="#efcfb0"/><ellipse cx="50" cy="59" rx="6" ry="4" fill="#5a4546"/><path d="M44 69q6 6 12 0" fill="none" stroke="#765456" stroke-width="3"/>`},
+    {name:'運動鞋',svg:`<path d="M11 62q14 2 23-24l16 7q0 16 16 18l23 4 5 18H9q-6-12 2-23Z" fill="#82b1e9" stroke="#4f7eba" stroke-width="4"/><path d="M9 77h84" stroke="#fff4da" stroke-width="8"/><path d="m42 49 17 5m-21 3 19 5" stroke="#fff" stroke-width="4" stroke-linecap="round"/>`},
+    {name:'帽子',svg:`<path d="M27 67 32 25q18-15 37 0l5 42" fill="#a39ae1" stroke="#6e6ab2" stroke-width="4"/><ellipse cx="50" cy="72" rx="43" ry="12" fill="#8681ce" stroke="#6e6ab2" stroke-width="4"/><path d="M28 56h44" stroke="#f6bb6a" stroke-width="8"/>`},
+    {name:'手錶',svg:`<rect x="38" y="5" width="24" height="90" rx="9" fill="#f6bf73"/><circle cx="50" cy="50" r="28" fill="#fbf8ed" stroke="#5e98c1" stroke-width="7"/><path d="M50 34v18l14 9" fill="none" stroke="#566277" stroke-width="4" stroke-linecap="round"/><circle cx="50" cy="50" r="3" fill="#566277"/>`},
+    {name:'鬧鐘',svg:`<circle cx="50" cy="54" r="32" fill="#f8edcc" stroke="#76a5d0" stroke-width="6"/><path d="M50 37v17l14 8" fill="none" stroke="#4d6084" stroke-width="4"/><path d="M28 13Q9 20 16 39M72 13q19 7 12 26" fill="none" stroke="#e5a35d" stroke-width="10" stroke-linecap="round"/><path d="m35 83-8 11m38-11 8 11" stroke="#76a5d0" stroke-width="5"/>`},
+    {name:'吉他',svg:`<path d="M56 16 78 5l9 12-18 18-5-2-8 18q15 20-2 34-16 16-34 1-13-16-2-30 6-8 16-6Z" fill="#e8ac6a" stroke="#a86e49" stroke-width="4"/><circle cx="45" cy="63" r="11" fill="#805753"/><path d="m45 60 29-45M39 59l30-47M51 63l27-44" stroke="#fff0d0" stroke-width="2"/>`},
+    {name:'音符',svg:`<path d="M40 20v51q0 13-17 13Q8 84 9 71q1-12 21-12V26l49-12v46q0 13-17 13-15 0-15-11 0-13 22-13V8Z" fill="#ad88d9" stroke="#7c65ae" stroke-width="4" stroke-linejoin="round"/>`},
+    {name:'望遠鏡',svg:`<path d="m13 42 58-26 13 25-58 26Z" fill="#79badd" stroke="#497fae" stroke-width="4"/><path d="m62 19 15 27m-53 1 11 21" stroke="#f2c36c" stroke-width="7"/><path d="m49 61-12 27m12-27 21 24" stroke="#657b9b" stroke-width="6" stroke-linecap="round"/>`},
+    {name:'地球',svg:`<circle cx="50" cy="50" r="40" fill="#9cd8f2" stroke="#558fb8" stroke-width="4"/><path d="m31 15 21 4 3 15-12 9 8 14-15 12-13-9-7-20 9-8Zm39 30 18-1-3 22-14 13-18-10 7-14" fill="#7acb9d"/><path d="M10 50h80M50 10q-28 41 0 80M50 10q28 41 0 80" stroke="#578fb8" stroke-width="2" fill="none" opacity=".6"/>`},
+    {name:'火山',svg:`<path d="M11 83 42 34h16l31 49Z" fill="#ab8c80" stroke="#806a6d" stroke-width="4"/><path d="m42 34 8 13 8-13 6 21-13-5-11 5Z" fill="#f08165"/><path d="M50 30q-15-12-5-21m6 21q8-19 17-17m-19 13Q31 16 26 27" fill="none" stroke="#eeab69" stroke-width="6" stroke-linecap="round"/>`},
+    {name:'雪人',svg:`<circle cx="51" cy="64" r="29" fill="#eef6fd" stroke="#94b7d0" stroke-width="4"/><circle cx="51" cy="31" r="22" fill="#eef6fd" stroke="#94b7d0" stroke-width="4"/><path d="M30 20h41l-7-9H39Z" fill="#7291bf"/><path d="M31 20V9h40v11" fill="#7291bf"/><circle cx="42" cy="30" r="3" fill="#3e566e"/><circle cx="60" cy="30" r="3" fill="#3e566e"/><path d="m52 34 17 5-17 3" fill="#f3af62"/><circle cx="51" cy="63" r="4" fill="#65839c"/><circle cx="51" cy="76" r="4" fill="#65839c"/>`},
+    {name:'漢堡',svg:`<path d="M14 42q3-30 36-30 33 0 36 30Z" fill="#f0b963" stroke="#cc8d48" stroke-width="4"/><path d="M13 49h74" stroke="#8b5f51" stroke-width="14" stroke-linecap="round"/><path d="M15 58q18 15 35 1 17 14 35-1" fill="none" stroke="#79bc69" stroke-width="9"/><path d="M13 69h74q0 21-37 21T13 69" fill="#f0b963" stroke="#cc8d48" stroke-width="4"/><g fill="#fff6d9"><circle cx="37" cy="28" r="3"/><circle cx="57" cy="22" r="3"/><circle cx="70" cy="34" r="3"/></g>`},
+    {name:'披薩',svg:`<path d="M11 24Q50 7 89 24L50 92Z" fill="#ffd58b" stroke="#ce9d56" stroke-width="4" stroke-linejoin="round"/><path d="M13 26q37-18 74 0" stroke="#b87849" stroke-width="12" fill="none" stroke-linecap="round"/><g fill="#e67877"><circle cx="38" cy="44" r="10"/><circle cx="64" cy="40" r="9"/><circle cx="50" cy="67" r="8"/></g><path d="m28 37 8 3m31 18 7 1" stroke="#6fa76f" stroke-width="5"/>`},
+    {name:'草莓',svg:`<path d="M18 32q32-20 64 0Q87 65 50 91 13 67 18 32Z" fill="#ed7e89" stroke="#bf4e62" stroke-width="4"/><path d="m50 17-10 13-18-5 10 12 18-7 17 7 11-12-18 5Z" fill="#75b885"/><g fill="#ffe5aa"><circle cx="34" cy="47" r="3"/><circle cx="58" cy="48" r="3"/><circle cx="45" cy="65" r="3"/><circle cx="65" cy="64" r="3"/></g>`},
+    {name:'葡萄',svg:`<path d="M51 27q1-15 18-18" fill="none" stroke="#588755" stroke-width="6"/><path d="M51 25Q32 2 19 22q20 17 32 3Z" fill="#80c38e"/><g fill="#9b88c9" stroke="#765ea6" stroke-width="2"><circle cx="39" cy="37" r="14"/><circle cx="60" cy="37" r="14"/><circle cx="28" cy="58" r="14"/><circle cx="51" cy="58" r="14"/><circle cx="73" cy="58" r="14"/><circle cx="40" cy="78" r="14"/><circle cx="62" cy="78" r="14"/></g>`},
+    {name:'香蕉',svg:`<path d="M14 31Q30 85 77 66q14-7 16-26Q80 94 42 90 16 84 14 31Z" fill="#f4d56e" stroke="#cfac48" stroke-width="4"/><path d="M13 31 9 19m78 28 7-13" stroke="#816855" stroke-width="7" stroke-linecap="round"/><path d="M27 68q25 22 53-3" stroke="#ffe9a1" stroke-width="5" fill="none"/>`},
+    {name:'甜甜圈',svg:`<circle cx="50" cy="50" r="39" fill="#e9b37d" stroke="#b9845e" stroke-width="4"/><path d="M18 40q8-29 31-30 30-2 37 28l-9 18-12-4-13 10-17-7-11 5Z" fill="#f3a3bd"/><circle cx="50" cy="50" r="13" fill="#fff7ed" stroke="#c49068" stroke-width="3"/><path d="m28 35 7 4m31-6 5 7m-38 25 7-3m30 9 4-5" stroke="#fff0a8" stroke-width="4"/>`},
+    {name:'籃球',svg:`<circle cx="50" cy="50" r="40" fill="#ed9e62" stroke="#ad6746" stroke-width="4"/><path d="M50 10v80M10 50h80M22 23q43 22 0 54m56-54q-43 22 0 54" fill="none" stroke="#895542" stroke-width="4"/>`},
+    {name:'火車',svg:`<rect x="21" y="10" width="59" height="69" rx="13" fill="#91c2e3" stroke="#4d8bad" stroke-width="4"/><rect x="29" y="20" width="43" height="26" rx="5" fill="#e1f5ff"/><rect x="27" y="51" width="46" height="17" rx="6" fill="#f0b67c"/><circle cx="34" cy="69" r="5" fill="#5c7191"/><circle cx="66" cy="69" r="5" fill="#5c7191"/><path d="m33 79-11 15m45-15 11 15M22 93h56" stroke="#64748d" stroke-width="5" stroke-linecap="round"/>`}
+  ];
+  const $ = id => document.getElementById(id);
+  const SCREENS = {home:$('homeScreen'),game:$('gameScreen'),result:$('resultScreen')};
+  const LEVELS={easy:{q:2,name:'入門'},normal:{q:3,name:'普通'},hard:{q:5,name:'困難'},expert:{q:7,name:'專家'}};
+  const STORAGE='symbolDetective.v1'; // 沿用 V1 紀錄，升級後不會丟失分數
+  let data={sound:false,tutorialSeen:false,records:{}};
+  try{const saved=JSON.parse(localStorage.getItem(STORAGE)||'{}');if(saved && typeof saved==='object')data={...data,...saved,records:saved.records||{}};}catch(_e){}
+  function saveData(){try{localStorage.setItem(STORAGE,JSON.stringify(data));}catch(_e){}}
+  let selectedMode='practice',selectedLevel='easy';
+  let state=null, currentScreen='home', currentModal=null, audioCtx=null, raf=0,lastFrame=0,wrongResetTimeout=0,returnFocus=null;
+  const simpleSvg=name=>`<svg viewBox="0 0 100 100" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">${SHAPES[name].svg}</svg>`;
+  function formatTime(sec){sec=Math.max(0,Math.floor(sec));return `${Math.floor(sec/60)}:${String(sec%60).padStart(2,'0')}`;}
+  function updateSound(){document.querySelectorAll('.sound-waves').forEach(e=>e.style.display=data.sound?'':'none');document.querySelectorAll('.sound-muted').forEach(e=>e.style.display=data.sound?'none':'');$('soundGame').textContent=data.sound?'♫ 音效開啟':'♫ 音效關閉';$('soundTop').setAttribute('aria-label',data.sound?'關閉音效':'開啟音效');}
+  function beep(type){if(!data.sound)return;try{audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==='suspended')audioCtx.resume();const at=audioCtx.currentTime;let notes=type==='good'?[[660,.075],[850,.1]]:type==='bad'?[[260,.11]]:[[480,.08]];notes.forEach(([hz,len],i)=>{const osc=audioCtx.createOscillator(),vol=audioCtx.createGain(),start=at+i*.095;osc.type='sine';osc.frequency.value=hz;vol.gain.setValueAtTime(.0001,start);vol.gain.exponentialRampToValueAtTime(.08,start+.015);vol.gain.exponentialRampToValueAtTime(.0001,start+len);osc.connect(vol).connect(audioCtx.destination);osc.start(start);osc.stop(start+len+.01);});}catch(_e){}}
+  function toggleSound(){data.sound=!data.sound;saveData();updateSound();beep('tap');}
+  $('soundTop').addEventListener('click',toggleSound);$('soundGame').addEventListener('click',toggleSound);updateSound();
+  function showScreen(name){currentScreen=name;Object.entries(SCREENS).forEach(([k,v])=>v.classList.toggle('hidden',k!==name));document.body.classList.toggle('in-game',name==='game');$('app').style.height=name==='game'?'100dvh':'';if(name==='game'){requestAnimationFrame(updateDeckLayout);}else{cancelAnimationFrame(raf);raf=0;}window.scrollTo(0,0);}
+  function setSelect(group,value){document.querySelectorAll(`[data-${group}]`).forEach(b=>{const chosen=b.getAttribute(`data-${group}`)===value;b.classList.toggle('selected',chosen);b.setAttribute('aria-pressed',String(chosen));});}
+  document.querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click',()=>{selectedMode=b.dataset.mode;setSelect('mode',selectedMode);}));
+  document.querySelectorAll('[data-level]').forEach(b=>b.addEventListener('click',()=>{selectedLevel=b.dataset.level;setSelect('level',selectedLevel);}));
+  // 有限射影平面 PG(2,q)：q=2,3,5,7 均為質數。
+  // 點編號：有限點 x*q+y，以及各種斜率及垂直方向的無窮遠點。
+  function makeDeck(q){
+    const cards=[];const finite=(x,y)=>x*q+y;
+    for(let m=0;m<q;m++)for(let b=0;b<q;b++){
+      const line=[];for(let x=0;x<q;x++)line.push(finite(x,(m*x+b)%q));line.push(q*q+m);cards.push(line);
+    }
+    for(let x=0;x<q;x++){const line=[];for(let y=0;y<q;y++)line.push(finite(x,y));line.push(q*q+q);cards.push(line);}
+    cards.push(Array.from({length:q+1},(_,i)=>q*q+i));
+    return cards;
+  }
+  function checkDeck(deck,q){const expected=q*q+q+1;if(deck.length!==expected)throw Error('卡組張數錯誤');for(const c of deck){if(c.length!==q+1||new Set(c).size!==q+1)throw Error('卡片圖案數量或重複錯誤');for(const s of c)if(s<0||s>=expected)throw Error('圖案 ID 錯誤');}for(let i=0;i<deck.length;i++)for(let j=i+1;j<deck.length;j++){const overlap=deck[i].filter(s=>deck[j].includes(s));if(overlap.length!==1)throw Error(`錯誤卡組：${i},${j}`);}return true;}
+  if(SHAPES.length<57)throw Error("專家卡組的圖案素材不足");
+  const decks={};for(const [k,lv] of Object.entries(LEVELS)){decks[k]=makeDeck(lv.q);checkDeck(decks[k],lv.q);}
+  // 開發測試接口：供自動化數學及操作測試使用，不影響遊戲畫面。
+  window.SymbolDetectiveTest={makeDeck,checkDeck,levels:LEVELS,icons:SHAPES.length};
+  function shuffle(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}return arr;}
+  function newPairPool(){const n=state.deck.length;const pairs=[];for(let i=0;i<n;i++)for(let j=i+1;j<n;j++)pairs.push([i,j]);return shuffle(pairs);}
+  function getNewPair(){if(!state.pairPool.length)state.pairPool=newPairPool();let found=-1;
+    for(let i=0;i<state.pairPool.length;i++){
+      const p=state.pairPool[i],common=state.deck[p[0]].find(id=>state.deck[p[1]].includes(id));
+      const recent=state.recentAnswers.slice(-Math.min(state.recentAnswers.length,2));
+      const used=state.lastPair && p[0]===state.lastPair[0] && p[1]===state.lastPair[1];
+      if(!recent.includes(common)&&!used){found=i;break;}
+    }
+    if(found===-1)found=0;
+    const pair=state.pairPool.splice(found,1)[0],a=state.deck[pair[0]],b=state.deck[pair[1]],answer=a.find(id=>b.includes(id));
+    state.lastPair=pair;state.recentAnswers.push(answer);if(state.recentAnswers.length>3)state.recentAnswers.shift();
+    return {a:shuffle(a.slice()),b:shuffle(b.slice()),answer};
+  }
+  // V2 智能隨機排版：座標和圖案 ID 完全獨立。使用每題固定種子，Resize 只重排同一題，不會換答案。
+  function seededRandom(seed){let a=seed>>>0;return function(){a=(a+0x6D2B79F5)|0;let t=Math.imul(a^(a>>>15),1|a);t^=t+Math.imul(t^(t>>>7),61|t);return ((t^(t>>>14))>>>0)/4294967296;};}
+  function randomSeed(){return Math.floor(Math.random()*0xFFFFFFFF)>>>0;}
+  function range(rng,a,b){return a+rng()*(b-a);}
+  // 兩個觸控方框與額外空隙不可碰撞；旋轉後 SVG 的 AABB 預先限制在觸控方框內。
+  function collides(a,b,gap){return Math.abs(a.x-b.x)<(a.tap+b.tap)/2+gap && Math.abs(a.y-b.y)<(a.tap+b.tap)/2+gap;}
+  function verifyLayout(layout,width,height,margin,gap){
+    for(let i=0;i<layout.length;i++){
+      const a=layout[i],half=a.tap/2;
+      if(a.x-half<margin-.05||a.x+half>width-margin+.05||a.y-half<margin-.05||a.y+half>height-margin+.05)return false;
+      const theta=Math.abs(a.rotation)*Math.PI/180;
+      if(a.pic*(Math.cos(theta)+Math.sin(theta))>a.tap-3+.1)return false;
+      for(let j=0;j<i;j++)if(collides(a,layout[j],gap))return false;
+    }
+    return true;
+  }
+  function buildRandomLayout(width,height,count,level,seed){
+    const rng=seededRandom(seed),margin=Math.max(11,Math.min(18,Math.min(width,height)*.085));
+    const gap=level==='easy'?12:level==='normal'?10:level==='hard'?8:7;
+    const cols=count===8?4:count===6?3:2,rows=2;
+    const innerW=width-2*margin,innerH=height-2*margin;
+    const cellCap=Math.min((innerW-gap*(cols-1))/cols,(innerH-gap*(rows-1))/rows);
+    // 絕對不要把觸控範圍縮至 44px 以下；容器不足由卡牌尺寸計算器處理。
+    const base=Math.min(100,Math.max(44,cellCap*.74));
+    const sizeSpread={easy:.08,normal:.11,hard:.15,expert:.16}[level];
+    const picSpread={easy:[.76,.88],normal:[.68,.93],hard:[.60,.95],expert:[.74,.97]}[level];
+    const rotMax={easy:0,normal:10,hard:25,expert:22}[level];
+    let best=null,bestPenalty=Infinity;
+    function alignmentPenalty(layout){
+      let score=0;
+      const tolX=Math.max(14,width*.057),tolY=Math.max(13,height*.078);
+      for(let i=0;i<layout.length;i++)for(let j=0;j<i;j++){
+        const dx=Math.abs(layout[i].x-layout[j].x),dy=Math.abs(layout[i].y-layout[j].y);
+        score+=Math.max(0,1-dx/tolX)*1.5;
+        score+=Math.max(0,1-dy/tolY)*2.4;
+      }
+      // 更偏好多個不同高度與水平位置，而不是固定兩行三列。
+      const bandsY=new Set(layout.map(p=>Math.floor((p.y-margin)/Math.max(1,innerH)*5)));
+      const bandsX=new Set(layout.map(p=>Math.floor((p.x-margin)/Math.max(1,innerW)*5)));
+      score+=Math.max(0,Math.min(4,count)-bandsY.size)*2.4;
+      score+=Math.max(0,Math.min(4,count)-bandsX.size)*1.2;
+      return score;
+    }
+    for(let pass=0;pass<38;pass++){
+      const placed=[];
+      // 困難組先放大圖案，令留位可控；並非根據答案 ID 決定大小。
+      const slots=Array.from({length:count},(_,i)=>({index:i,scale:range(rng,1-sizeSpread,1+sizeSpread)})).sort((a,b)=>b.scale-a.scale);
+      let failed=false;
+      for(const slot of slots){
+        const tap=Math.max(44,Math.min(cellCap*1.17,base*slot.scale));
+        const rotation=range(rng,-rotMax,rotMax);
+        const angle=Math.abs(rotation)*Math.PI/180;
+        const maxPic=(tap-5)/(Math.cos(angle)+Math.sin(angle));
+        const pic=Math.max(29,Math.min(maxPic,maxPic*range(rng,...picSpread)));
+        let found=null;
+        for(let attempt=0;attempt<190;attempt++){
+          const x=range(rng,margin+tap/2,width-margin-tap/2);
+          const y=range(rng,margin+tap/2,height-margin-tap/2);
+          const candidate={x,y,tap,pic,rotation};
+          if(placed.every(p=>!collides(candidate,p,gap))){found=candidate;break;}
+        }
+        if(!found){failed=true;break;}
+        placed.push({...found,index:slot.index});
+      }
+      if(!failed){const result=placed.sort((a,b)=>a.index-b.index).map(({index,...p})=>p);
+        if(verifyLayout(result,width,height,margin,gap)){
+          const score=alignmentPenalty(result);
+          if(score<bestPenalty){best=result;bestPenalty=score;}
+          if(score<.8)break;
+        }
+      }
+    }
+    if(best)return best;
+    // 安全後備：先用經驗證的錯列分散位置，再在不碰撞的前提下各自擾動。
+    // 不使用固定位置配對答案；所有圖案 ID 依然隨機分派到安全位置。
+    const fallBackCols=count===3?3:cols,fallBackRows=count===3?1:rows;
+    const stepX=innerW/fallBackCols,stepY=innerH/fallBackRows;
+    const safeTap=Math.max(44,Math.min(85,stepX-gap-2,stepY-gap-2));
+    const result=[];
+    const cells=Array.from({length:count},(_,i)=>({x:margin+stepX*(i%fallBackCols+.5),y:margin+stepY*(Math.floor(i/fallBackCols)+.5)}));
+    // 對欄位順序洗牌，不讓每次的圖案按陣列序號落在固定位置。
+    for(let i=cells.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[cells[i],cells[j]]=[cells[j],cells[i]];}
+    for(const c of cells){
+      const tap=safeTap;
+      const rotation=range(rng,-rotMax,rotMax);
+      const angle=Math.abs(rotation)*Math.PI/180;
+      const maxPic=(tap-5)/(Math.cos(angle)+Math.sin(angle));
+      let chosen=null;
+      for(let attempt=0;attempt<60;attempt++){
+        const p={x:c.x+range(rng,-Math.min(13,(stepX-tap)/3),Math.min(13,(stepX-tap)/3)),y:c.y+range(rng,-Math.min(10,(stepY-tap)/3),Math.min(10,(stepY-tap)/3)),tap,pic:Math.max(29,Math.min(maxPic,maxPic*range(rng,...picSpread))),rotation};
+        if(verifyLayout([...result,p],width,height,margin,gap)){chosen=p;break;}
+      }
+      if(!chosen){chosen={x:c.x,y:c.y,tap,pic:maxPic*.77,rotation};}
+      result.push(chosen);
+    }
+    if(!verifyLayout(result,width,height,margin,gap)){
+      // 極端細小螢幕：取消隨機偏移，使用已驗證的安全格中心，保留最少 44px 觸控區。
+      const emergency=cells.map(c=>({x:c.x,y:c.y,tap:safeTap,pic:safeTap*.78,rotation:0}));
+      if(!verifyLayout(emergency,width,height,margin,gap))throw Error('卡牌空間不足，請增加卡牌尺寸');
+      return emergency;
+    }
+    return result;
+  }
+  function renderCard(el,icons,side){
+    const width=el.clientWidth,height=el.clientHeight;
+    if(!width||!height)return;
+    const positions=buildRandomLayout(width,height,icons.length,state.level,state.layoutSeeds[side]);
+    el.innerHTML=icons.map((symbolId,i)=>{
+      const p=positions[i];
+      return `<button type="button" class="symbol" data-id="${symbolId}" data-side="${side}" aria-label="${SHAPES[symbolId].name}" style="--cx:${p.x.toFixed(2)}px;--cy:${p.y.toFixed(2)}px;--tap:${p.tap.toFixed(2)}px;--pic:${p.pic.toFixed(2)}px;--rotation:${p.rotation.toFixed(2)}deg">${simpleSvg(symbolId)}</button>`;
+    }).join('');
+  }
+  function drawPair(){
+    state.hintShown=false;$('hintBtn').disabled=state.mode!=='practice';state.current=getNewPair();
+    state.layoutSeeds={a:randomSeed(),b:randomSeed()};
+    $('cardA').classList.remove('win');$('cardB').classList.remove('win');
+    $('cardA').innerHTML='';$('cardB').innerHTML='';
+    updateDeckLayout();renderCard($('cardA'),state.current.a,'a');renderCard($('cardB'),state.current.b,'b');
+    setInstruction('找出兩張卡一樣的圖案！','');updateHud();
+  }
+  function updateDeckLayout(){
+    if(currentScreen!=='game')return;
+    const deck=$('playDeck');deck.style.minHeight='0px';
+    const w=deck.clientWidth,h=deck.clientHeight;if(!w)return;
+    // 使用實際視窗方向，而非被已渲染卡片撐起的臨時高度決定橫直排列。
+    const horizontal=window.innerWidth>=520 && window.innerWidth>window.innerHeight*1.17;
+    deck.classList.toggle('horizontal',horizontal);deck.classList.toggle('vertical',!horizontal);
+    const count=state?.current?.a.length||6;
+    const minWidth=count===8?268:count===6?244:count===4?220:214;
+    const ratio=1.44,g=14;
+    let cardW;
+    if(horizontal){cardW=Math.min(510,(w-22-g)/2,Math.max(0,(h-14)*ratio));}
+    else{cardW=Math.min(510,w-20,Math.max(0,((h-20-g)/2)*ratio));}
+    cardW=Math.max(minWidth,Math.floor(cardW));
+    const cardH=Math.round(cardW/ratio);
+    deck.style.setProperty('--card-width',cardW+'px');
+    deck.style.setProperty('--card-height',cardH+'px');
+    deck.style.minHeight=(horizontal?cardH+16:cardH*2+g+12)+'px';
+    // 按實際尺寸重排，但小於 5px 的瀏覽器列伸縮不會令圖案亂跳。
+    const changed=!state||Math.abs((state.cardWidth||0)-cardW)>4||Math.abs((state.cardHeight||0)-cardH)>4;
+    if(state){state.cardWidth=cardW;state.cardHeight=cardH;
+      if(changed&&state.current&&$('cardA').querySelector('.symbol')){
+        renderCard($('cardA'),state.current.a,'a');renderCard($('cardB'),state.current.b,'b');
+        if(state.hintShown){const hinted=$('cardA').querySelector(`.symbol[data-id="${state.current.answer}"]`);if(hinted)hinted.classList.add('hinted');}
+        if(state.phase==='correctFeedback')document.querySelectorAll('.symbol').forEach(b=>{if(+b.dataset.id===state.current.answer)b.classList.add('good');});
+        if(state.phase==='wrongFeedback'&&state.wrongPick){const b=$(state.wrongPick.side==='a'?'cardA':'cardB').querySelector(`.symbol[data-id="${state.wrongPick.id}"]`);if(b)b.classList.add('wrong');}
+      }
+    }
+  }
+  window.SymbolDetectiveTest.buildRandomLayout=buildRandomLayout;
+  window.SymbolDetectiveTest.verifyLayout=verifyLayout;
+  function updateHud(){if(!state)return;
+    const timed=state.mode==='timed';$('statValue1').textContent=timed?Math.ceil(state.timeLeft)+' 秒':Math.min(state.round,10)+' / 10';
+    $('statValue2').textContent=state.correct;
+    $('statValue3').textContent=timed?'× '+state.combo:formatTime(state.elapsed);
+    $('statValue1').classList.toggle('soon',timed&&state.timeLeft<=10);
+    if(timed){$('timerFill').style.width=(Math.max(0,state.timeLeft)/60*100)+'%';$('timerFill').classList.toggle('low',state.timeLeft<=15);}
+  }
+  function setInstruction(msg,style){const el=$('instruction');el.textContent=msg;el.classList.remove('good','bad');if(style)el.classList.add(style);}
+  // 開場以原有 requestAnimationFrame 時鐘計數；切換頁面與暫停都不會偷跑。
+  let lastCountdownStage='';
+  function hideCountdownOverlay(){
+    $('countdownOverlay').classList.add('hidden');
+    $('countdownOverlay').setAttribute('aria-hidden','true');
+    $('app').inert=false;
+    lastCountdownStage='';
+  }
+  function updateCountdownOverlay(){
+    if(!state||state.mode!=='timed'||state.phase!=='countdown')return;
+    const overlay=$('countdownOverlay');
+    overlay.classList.remove('hidden');overlay.setAttribute('aria-hidden','false');$('app').inert=true;
+    const remaining=state.countdown;
+    const stage=remaining>2.7?'3':remaining>1.7?'2':remaining>.7?'1':'開始！';
+    if(stage===lastCountdownStage)return;
+    lastCountdownStage=stage;
+    const number=$('countdownNumber');
+    number.classList.remove('pop');
+    number.textContent=stage;
+    number.classList.toggle('is-go',stage==='開始！');
+    // Force a new keyframe sequence only when the displayed stage changes.
+    void number.offsetWidth;
+    number.classList.add('pop');
+    const reached=stage==='3'?1:stage==='2'?2:3;
+    [1,2,3].forEach(i=>$('countDot'+i).classList.toggle('lit',i<=reached));
+  }
+  let sessionToken=0;
+  const COMBO_REWARDS={3:'✨ 連續高手',5:'🔥 觀察達人',10:'🏆 專注大師'};
+  function inputAllowed(){return state&&state.phase==='playing'&&currentScreen==='game';}
+  function showWrongOverlay(){const e=$('wrongOverlay');e.classList.remove('hidden','fade');e.setAttribute('aria-hidden','false');$('app').inert=true;}
+  function hideWrongOverlay(){const e=$('wrongOverlay');e.classList.add('hidden');e.classList.remove('fade');e.setAttribute('aria-hidden','true');$('app').inert=false;}
+  function clearTransientFeedback(){hideWrongOverlay();$('successSpark').classList.add('hidden');$('comboToast').classList.add('hidden');document.querySelectorAll('.symbol.wrong,.symbol.good').forEach(el=>el.classList.remove('wrong','good'));}
+  function popReward(combo){const txt=COMBO_REWARDS[combo];if(!txt)return;state.awards.push(txt);state.comboToastRemaining=1.3;const el=$('comboToast');el.textContent=txt;el.classList.remove('hidden');el.style.animation='none';void el.offsetWidth;el.style.animation='';beep('tap');}
+  function restoreHintButton(){if(state)$('hintBtn').disabled=!inputAllowed()||state.mode!=='practice'||state.hintShown;}
+  function startGame(){sessionToken++;hideCountdownOverlay();closeModal();clearTransientFeedback();const lev=LEVELS[selectedLevel],timed=selectedMode==='timed';
+    state={token:sessionToken,mode:selectedMode,level:selectedLevel,deck:decks[selectedLevel],pairPool:[],lastPair:null,recentAnswers:[],current:null,round:1,correct:0,wrong:0,hints:0,combo:0,maxCombo:0,awards:[],comboToastRemaining:0,elapsed:0,timeLeft:60,countdown:timed?3.7:0,feedbackLeft:0,phase:timed?'countdown':'playing',resumePhase:null,cardWidth:0,cardHeight:0,layoutSeeds:null,hintShown:false,wrongPick:null};
+    state.pairPool=newPairPool();$('gameModeChip').textContent=selectedMode==='timed'?'60 秒挑戰':'自由練習';$('gameLevelChip').textContent=lev.name;
+    $('statLabel1').textContent=timed?'剩餘時間':'目前題目';$('statLabel2').textContent=timed?'目前得分':'正確次數';$('statLabel3').textContent=timed?'連續答對':'已用時間';$('timerTrack').classList.toggle('hidden',!timed);$('hintBtn').classList.toggle('hidden',timed);
+    showScreen('game');drawPair();updateDeckLayout();if(timed){setInstruction('準備開始…','');updateCountdownOverlay();}else{setInstruction('找出兩張卡一樣的圖案！','');restoreHintButton();}lastFrame=performance.now();if(!raf)raf=requestAnimationFrame(frame);
+  }
+  function nextPairAfterCorrect(){
+    $('successSpark').classList.add('hidden');
+    if(state.mode==='practice'&&state.round>=10){finishGame();return;}
+    if(state.mode==='practice')state.round++;
+    state.phase='playing';drawPair();restoreHintButton();
+  }
+  function completeWrongFeedback(){
+    hideWrongOverlay();state.wrongPick=null;document.querySelectorAll('.symbol.wrong').forEach(el=>el.classList.remove('wrong'));
+    state.phase='playing';setInstruction(state.hintShown?'留意發光的圖案！':'找出兩張卡一樣的圖案！','');restoreHintButton();
+  }
+  function tick(dt){
+    if(!state||state.phase==='paused'||state.phase==='finished')return;
+    if(state.phase==='countdown'){
+      state.countdown=Math.max(0,state.countdown-dt);
+      if(state.countdown<=0){state.phase='playing';hideCountdownOverlay();restoreHintButton();setInstruction('找出兩張卡一樣的圖案！','');}
+      else updateCountdownOverlay();
+      return;
+    }
+    state.elapsed+=dt;
+    if(state.mode==='timed'){
+      state.timeLeft=Math.max(0,state.timeLeft-dt);
+      if(state.timeLeft<=0){finishGame();return;}
+    }
+    if(state.comboToastRemaining>0){state.comboToastRemaining=Math.max(0,state.comboToastRemaining-dt);if(state.comboToastRemaining===0)$('comboToast').classList.add('hidden');}
+    if(state.phase==='wrongFeedback'){
+      state.feedbackLeft=Math.max(0,state.feedbackLeft-dt);
+      $('wrongOverlay').classList.toggle('fade',state.feedbackLeft<=.2);
+      if(state.feedbackLeft===0)completeWrongFeedback();
+    }else if(state.phase==='correctFeedback'){
+      state.feedbackLeft=Math.max(0,state.feedbackLeft-dt);
+      if(state.feedbackLeft===0)nextPairAfterCorrect();
+    }
+    updateHud();
+  }
+  function frame(now){raf=0;const dt=Math.max(0,(now-lastFrame)/1000);lastFrame=now;if(currentScreen==='game'&&state){tick(dt);if(currentScreen==='game')raf=requestAnimationFrame(frame);}}
+  function hitSymbol(evt){
+    const button=evt.target.closest('.symbol');if(!button||!inputAllowed())return;
+    // 先結算真實經過時間，再同步鎖定狀態；防止最後一刻的超時計分。
+    const now=performance.now();tick(Math.max(0,(now-lastFrame)/1000));lastFrame=now;
+    if(!inputAllowed())return;
+    const id=Number(button.dataset.id),pickedSide=button.dataset.side;
+    if(id===state.current.answer){
+      state.phase='correctFeedback';state.feedbackLeft=state.mode==='practice'?.7:.52;
+      state.correct++;
+      // 使用提示的答案不累積 Combo，但仍算正確點選。
+      if(!state.hintShown){state.combo++;state.maxCombo=Math.max(state.maxCombo,state.combo);popReward(state.combo);}else state.combo=0;
+      document.querySelectorAll('.symbol').forEach(b=>{if(Number(b.dataset.id)===id){b.classList.remove('hinted');b.classList.add('good');}});
+      $('successSpark').classList.remove('hidden');setInstruction('答對了！太厲害了 ✦','good');beep('good');
+    }else{
+      // 僅第一下錯誤有效：進入鎖定狀態必須先於動畫、音效與任何非同步工作。
+      state.phase='wrongFeedback';state.feedbackLeft=1.2;state.wrong++;state.combo=0;state.wrongPick={side:pickedSide,id};
+      button.classList.add('wrong');showWrongOverlay();setInstruction('再找找！','bad');beep('bad');
+    }
+    restoreHintButton();updateHud();
+  }
+  $('cardA').addEventListener('click',hitSymbol);$('cardB').addEventListener('click',hitSymbol);
+  $('hintBtn').addEventListener('click',()=>{
+    if(!inputAllowed()||state.mode!=='practice'||state.hintShown)return;
+    state.hintShown=true;state.hints++;state.combo=0;const el=$('cardA').querySelector(`.symbol[data-id="${state.current.answer}"]`);
+    if(el)el.classList.add('hinted');restoreHintButton();setInstruction('看第一張卡發光的圖案，在第二張卡找找！','');beep('tap');updateHud();
+  });
+  function pauseGame(){
+    if(!state||state.phase==='paused'||state.phase==='finished')return;
+    state.resumePhase=state.phase;state.phase='paused';hideCountdownOverlay();hideWrongOverlay();openModal('pause');
+  }
+  function resumeGame(){
+    if(!state||state.phase!=='paused')return;
+    state.phase=state.resumePhase||'playing';state.resumePhase=null;closeModal();lastFrame=performance.now();restoreHintButton();
+    if(state.phase==='countdown')updateCountdownOverlay();
+    if(state.phase==='wrongFeedback')showWrongOverlay();
+  }
+  $('pauseBtn').addEventListener('click',pauseGame);
+  $('leaveBtn').addEventListener('click',()=>{if(!state)return;if(state.phase!=='paused'){state.resumePhase=state.phase;state.phase='paused';hideCountdownOverlay();hideWrongOverlay();}openModal('exit');});
+  document.addEventListener('visibilitychange',()=>{
+    if(document.hidden&&currentScreen==='game'&&state&&state.phase!=='paused'&&state.phase!=='finished')pauseGame();
+    else if(!document.hidden)lastFrame=performance.now();
+  });
+  window.addEventListener('resize',()=>{if(currentScreen==='game')requestAnimationFrame(updateDeckLayout);});
+  window.addEventListener('orientationchange',()=>setTimeout(updateDeckLayout,150));
+  function finishGame(){
+    if(!state||state.phase==='finished')return;
+    hideCountdownOverlay();clearTransientFeedback();state.phase='finished';sessionToken++;
+    const timed=state.mode==='timed';let newRecord=false;
+    if(timed){const old=data.records[state.level];if(!old||state.correct>old.score){data.records[state.level]={score:state.correct,date:new Date().toISOString().slice(0,10)};saveData();newRecord=true;}}
+    $('resultBadge').innerHTML=simpleSvg(timed?25:6);$('resultTitle').textContent=timed?'時間到！':'全部完成！';$('resultSubtitle').textContent=timed?`你完成了 ${LEVELS[state.level].name} 難度的 60 秒挑戰`:'你完成了 10 題觀察練習！';
+    $('resultScore').innerHTML=timed?`${state.correct} <small>分</small>`:`${state.correct} <small>題</small>`;
+    const attempts=state.correct+state.wrong,accuracy=attempts?Math.round(state.correct/attempts*100)+'%':'—';
+    const items=timed?[['準確率',accuracy],['答錯次數',state.wrong],['最高 Combo',state.maxCombo],['有效點選',attempts]]:[['完成時間',formatTime(state.elapsed)],['準確率',accuracy],['答錯次數',state.wrong],['提示次數',state.hints],['最高 Combo',state.maxCombo],['有效點選',attempts]];
+    $('resultStats').innerHTML=items.map(([name,val])=>`<div class="result-stat"><strong>${val}</strong><span>${name}</span></div>`).join('');
+    $('resultMedals').innerHTML=state.awards.map(a=>`<span>${a}</span>`).join('');
+    $('recordBanner').classList.toggle('hidden',!newRecord);showScreen('result');
+  }
+  $('replayBtn').addEventListener('click',startGame);
+  function goHome(){sessionToken++;hideCountdownOverlay();closeModal();clearTransientFeedback();state=null;showScreen('home');}
+  $('resultHomeBtn').addEventListener('click',goHome);
+  $('startBtn').addEventListener('click',()=>{startGame();if(!data.tutorialSeen){data.tutorialSeen=true;saveData();pauseGame();openModal('tutorial-game');}});
+  $('rulesTop').addEventListener('click',()=>{if(currentScreen==='game'&&state&&state.phase!=='finished'){if(state.phase!=='paused'){state.resumePhase=state.phase;state.phase='paused';hideCountdownOverlay();hideWrongOverlay();}openModal('tutorial-game');}else{openModal('tutorial');}});
+  $('openRecords').addEventListener('click',()=>openModal('records'));
+  const modalLayer=$('modalLayer');
+  function closeModal(){modalLayer.classList.add('hidden');currentModal=null;if(returnFocus&&returnFocus.isConnected){returnFocus.focus({preventScroll:true});returnFocus=null;}}
+  function addModalButton(label,css,fn){const b=document.createElement('button');b.type='button';b.className='btn '+css;b.textContent=label;b.addEventListener('click',fn);$('modalButtons').append(b);}
+  function openModal(type){returnFocus=document.activeElement;currentModal=type;$('modalButtons').innerHTML='';let title='',content='',allowX=true;
+    if(type==='pause'){title='遊戲暫停';content='<p>休息一下吧！準備好再繼續找圖案。</p>';addModalButton('繼續遊戲','primary',resumeGame);addModalButton('返回首頁','ghost',()=>openModal('exit'));allowX=false;}
+    else if(type==='exit'){title='要離開這一局嗎？';content='<p>離開後這局的進度不會儲存。你可以選擇繼續遊戲。</p>';addModalButton('繼續遊戲','primary',resumeGame);addModalButton('確定離開','ghost',goHome);allowX=false;}
+    else if(type==='records'){title='🏆 最佳紀錄';let rows='';for(const lvl of ['easy','normal','hard','expert']){const r=data.records[lvl];rows+=`<div class="record-row"><strong>${LEVELS[lvl].name}</strong><span>${r?r.date:'尚未挑戰'}</span><b>${r?r.score+' 分':'—'}</b></div>`;}
+      content=`<p>每種難度都會獨立記錄 60 秒挑戰的最高得分。</p><div class="record-table">${rows}</div>`;addModalButton('返回','secondary',closeModal);}
+    else if(type==='tutorial'||type==='tutorial-game'){title='怎樣玩？';content=`<p>兩張卡片之間，<strong style="color:#3357b8">一定只有一個相同圖案</strong>。用手指或滑鼠按一下它，就能過關！</p><div class="tutorial-art"><div class="tut-card">${simpleSvg(0).replace('<svg','<svg class="sample-match"')}${simpleSvg(2)}${simpleSvg(6)}${simpleSvg(4)}</div><div class="tut-card">${simpleSvg(17)}${simpleSvg(10)}${simpleSvg(0).replace('<svg','<svg class="sample-match"')}${simpleSvg(13)}</div></div><div class="tut-note">✦ 兩張卡相同的圖案是「蘋果」！</div><p style="font-size:12px">點選錯誤時會暫停選取約 1.2 秒。連續答對可以獲得獎章。自由練習可以使用提示。</p>`;
+      if(type==='tutorial-game'){addModalButton('明白，開始玩！','primary',resumeGame);allowX=false;}else addModalButton('明白了！','primary',closeModal);}
+    $('modalTitle').textContent=title;$('modalContent').innerHTML=content;$('modalClose').classList.toggle('hidden',!allowX);modalLayer.classList.remove('hidden');(allowX?$('modalClose'):$('modalButtons').querySelector('button')).focus({preventScroll:true});
+  }
+  $('modalClose').addEventListener('click',closeModal);
+  modalLayer.addEventListener('click',evt=>{if(evt.target===modalLayer && ['tutorial','records'].includes(currentModal))closeModal();});
+  document.addEventListener('keydown',evt=>{if(evt.key==='Escape'&&currentModal){evt.preventDefault();if(currentModal==='pause'||currentModal==='exit'||currentModal==='tutorial-game')resumeGame();else closeModal();}});
+  // 首頁的小型裝飾卡，沿用同一套 SVG 圖案。
+  const artItems=[0,2,6,8,11,14];
+  const artPositions=[[9,9],[56,2],[26,48]];
+  [$('artA'),$('artB')].forEach((el,index)=>{artPositions.forEach(([x,y],i)=>{const wrap=document.createElement('span');wrap.className='art-glyph';wrap.style.left=x+'%';wrap.style.top=y+'%';wrap.innerHTML=simpleSvg(artItems[index*3+i]);el.append(wrap);});});
+  // 首頁初次顯示。
+  showScreen('home');
+})();
+</script>
+</body>
+</html>
